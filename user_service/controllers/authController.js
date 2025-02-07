@@ -1,5 +1,6 @@
 const { admin, database } = require('../../services/firebaseService');
 const nodemailer = require('nodemailer');
+
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
