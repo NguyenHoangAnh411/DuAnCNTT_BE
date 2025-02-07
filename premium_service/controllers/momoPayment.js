@@ -9,7 +9,7 @@ class momoPayment {
         var orderInfo = 'pay with MoMo';
         var partnerCode = 'MOMO';
         var redirectUrl = 'https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b'; // thanh toán xong nó chuyển về
-        var ipnUrl = 'http://localhost:3014/api/premium/payment/callback';
+        var ipnUrl = 'https://premium-service.onrender.com/api/premium/payment/callback';
         var requestType = "payWithMethod";
         var amount = '50000'; // số tiền mặc định
         var orderId = partnerCode + new Date().getTime();
