@@ -1,11 +1,10 @@
 const axios = require('axios');
 const crypto = require('crypto');
-
+var accessKey = 'F8BBA842ECF85';
+var secretKey = 'K951B6PE1waDMi640xX08PD3vg6EkVlz';
 class momoPayment {
     static async momoPayment(req, res) {
         // có thể tự thêm body
-        var accessKey = 'F8BBA842ECF85';
-        var secretKey = 'K951B6PE1waDMi640xX08PD3vg6EkVlz';
         var orderInfo = 'pay with MoMo';
         var partnerCode = 'MOMO';
         var redirectUrl = 'https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b'; // thanh toán xong nó chuyển về
@@ -64,6 +63,39 @@ class momoPayment {
                 error: error.response ? error.response.data : error.message
             });
         }
+    }
+
+    static async checkTransactionStatus(req, res) {
+        const { orderId } = req.body;
+
+        const rawSignature = `accessKey=${accessKey}&orderId=${orderId}&partnerCode=MOMO&requestId=${orderId}`;
+
+        const signature = crypto
+            .createHmac("sha256", secretKey)
+            .update(rawSignature)
+            .digest('hex')
+
+
+        const requestBody = JSON.stringify({
+            partnerCode: "MOMO",
+            requestId: orderId,
+            orderId,
+            signature,
+            lang: 'vi'
+        });
+
+        const options = {
+            method: "POST",
+            url: "https://test-payment.momo.vn/v2/gateway/api/query",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: requestBody
+        }
+
+        let result = await axios(options);
+
+        return res.status(200).json(result.data);
     }
 
     static async Callback(req, res) {

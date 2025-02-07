@@ -15,5 +15,6 @@ router.post('/cancel', PremiumController.cancelPremium);
 // Momo Payment
 router.post('/payment/momoPayment', momoPayment.momoPayment);
 router.post('/payment/callback', momoPayment.Callback);
+router.post('/payment/transactionStatus', momoPayment.checkTransactionStatus);
 
 module.exports = router;
