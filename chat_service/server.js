@@ -21,7 +21,7 @@ const io = new Server(server, {
 const setupSocketHandlers = require('../services/Socket');
 setupSocketHandlers(io);
 
-const port = process.env.CHAT_PORT || 8009;
+const port = process.env.CHAT_PORT || 3009;
 
 app.use(cors({ origin: "*", credentials: true }));
 app.use(helmet());

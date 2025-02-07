@@ -1,3 +1,4 @@
+const { database } = require('../../services/firebaseService');
 const axios = require('axios');
 const crypto = require('crypto');
 const config = require('../config/config');
@@ -105,20 +106,44 @@ class MomoPayment {
     
             const userData = JSON.parse(Buffer.from(extraData, 'base64').toString('utf-8'));
             const userId = userData.userId;
+
+            const premiumPlans = {
+                '50000': 30,
+                '150000': 90,
+                '500000': 365
+            };
     
-            await MomoPayment.updatePremiumStatus({
-                body: {
-                    userId,
-                    transactionId: transId,
-                    amount,
-                    orderInfo,
-                    orderId
-                }
-            }, res);
+            const durationDays = premiumPlans[amount] || 30;
     
-            return res.status(200).json({ message: 'Cập nhật premium thành công' });
+            const now = Date.now();
+            const expiry = now + durationDays * 24 * 60 * 60 * 1000;
+    
+            await database.ref(`users/${userId}/premium`).set({
+                isPremium: true,
+                premiumStart: now,
+                premiumExpiry: expiry,
+                transactionId: transId,
+                orderId,
+                amount,
+                orderInfo
+            });
+    
+            await database.ref(`transactions/${userId}/${transId}`).set({
+                type: 'premium_purchase',
+                amount,
+                date: now,
+                orderId,
+                orderInfo,
+                status: 'success'
+            });
+
+            res.status(200).json({ 
+                message: 'Cập nhật premium thành công',
+                premiumExpiry: expiry 
+            });
         } catch (error) {
-            return res.status(500).json({ 
+            console.error('Lỗi xử lý callback:', error);
+            res.status(500).json({ 
                 message: 'Lỗi xử lý callback', 
                 error: error.message 
             });
