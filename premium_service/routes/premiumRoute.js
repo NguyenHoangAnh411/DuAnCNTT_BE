@@ -1,6 +1,10 @@
 const express = require('express');
-
+const app = express();
 const router = express.Router();
+
+app.use(express.json());
+app.use(express.urlencoded({extended: true}))
+
 const PremiumController = require('../controllers/premiumController');
 const momoPayment = require('../controllers/momoPayment');
 // PremiumController
@@ -10,5 +14,6 @@ router.post('/cancel', PremiumController.cancelPremium);
 
 // Momo Payment
 router.post('/payment/momoPayment', momoPayment.momoPayment);
+router.post('/payment/callback', momoPayment.Callback);
 
 module.exports = router;
