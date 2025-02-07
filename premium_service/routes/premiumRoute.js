@@ -1,20 +1,14 @@
 const express = require('express');
-const app = express();
+const MomoPayment = require('../controllers/momoPayment');
+const PremiumController = require('../controllers/premiumController');
+
 const router = express.Router();
 
-app.use(express.json());
-app.use(express.urlencoded({extended: true}))
+router.post('/create-payment', MomoPayment.createPayment);
+router.post('/callback', MomoPayment.callback);
 
-const PremiumController = require('../controllers/premiumController');
-const momoPayment = require('../controllers/momoPayment');
-// PremiumController
-router.post('/activate', PremiumController.updatePremiumStatus);
-router.get('/status/:userId', PremiumController.checkPremiumStatus);
-router.post('/cancel', PremiumController.cancelPremium);
-
-// Momo Payment
-router.post('/payment/momoPayment', momoPayment.momoPayment);
-router.post('/payment/callback', momoPayment.Callback);
-router.post('/payment/transactionStatus', momoPayment.checkTransactionStatus);
+router.post('/update-premium-status', PremiumController.updatePremiumStatus);
+router.get('/check-premium-status/:userId', PremiumController.checkPremiumStatus);
+router.post('/cancel-premium', PremiumController.cancelPremium);
 
 module.exports = router;

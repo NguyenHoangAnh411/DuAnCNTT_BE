@@ -1,109 +1,130 @@
 const axios = require('axios');
 const crypto = require('crypto');
-var accessKey = 'F8BBA842ECF85';
-var secretKey = 'K951B6PE1waDMi640xX08PD3vg6EkVlz';
-class momoPayment {
-    static async momoPayment(req, res) {
-        // có thể tự thêm body
-        var orderInfo = 'pay with MoMo';
-        var partnerCode = 'MOMO';
-        var redirectUrl = 'https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b'; // thanh toán xong nó chuyển về
-        var ipnUrl = 'https://premium-service.onrender.com/api/premium/payment/callback';
-        var requestType = "payWithMethod";
-        var amount = '50000'; // số tiền mặc định
-        var orderId = partnerCode + new Date().getTime();
-        var requestId = orderId;
-        var extraData ='';
-        var orderGroupId ='';
-        var autoCapture =true;
-        var lang = 'vi';
+const config = require('../config/config');
 
-        var rawSignature = "accessKey=" + accessKey + "&amount=" + amount + "&extraData=" + extraData + "&ipnUrl=" + ipnUrl + "&orderId=" + orderId + "&orderInfo=" + orderInfo + "&partnerCode=" + partnerCode + "&redirectUrl=" + redirectUrl + "&requestId=" + requestId + "&requestType=" + requestType;
+class MomoPayment {
+    static async createPayment(req, res) {
+        const { amount, orderInfo, userId } = req.body;
 
-        var signature = crypto.createHmac('sha256', secretKey)
+        const orderId = `${config.partnerCode}${Date.now()}`;
+        const extraData = Buffer.from(JSON.stringify({ userId })).toString('base64');
+
+        const rawSignature = `accessKey=${config.accessKey}&amount=${amount}&extraData=${extraData}&ipnUrl=${config.ipnUrl}&orderId=${orderId}&orderInfo=${orderInfo}&partnerCode=${config.partnerCode}&redirectUrl=${config.redirectUrl}&requestId=${orderId}&requestType=payWithMethod`;
+        
+        const signature = crypto.createHmac('sha256', config.secretKey)
             .update(rawSignature)
             .digest('hex');
 
-        const requestBody = JSON.stringify({
-            partnerCode : partnerCode,
-            partnerName : "Zap",
-            storeId : "MomoTestStore",
-            requestId : requestId,
-            amount : amount,
-            orderId : orderId,
-            orderInfo : orderInfo,
-            redirectUrl : redirectUrl,
-            ipnUrl : ipnUrl,
-            lang : lang,
-            requestType: requestType,
-            autoCapture: autoCapture,
-            extraData : extraData,
-            orderGroupId: orderGroupId,
-            signature : signature
-        });
-
-        const options = {
-            method: "POST",
-            url: "https://test-payment.momo.vn/v2/gateway/api/create",
-            headers: {
-                'Content-Type': 'application/json',
-                'Content-Length': Buffer.byteLength(requestBody)
-            },
-            data: requestBody
-        }
+        const requestBody = {
+            partnerCode: config.partnerCode,
+            requestId: orderId,
+            amount,
+            orderId,
+            orderInfo,
+            redirectUrl: config.redirectUrl,
+            ipnUrl: config.ipnUrl,
+            lang: 'vi',
+            requestType: "payWithMethod",
+            extraData,
+            signature
+        };
 
         try {
-            const result = await axios(options);
+            const result = await axios.post(config.momoEndpoint, requestBody);
             return res.status(200).json(result.data);
         } catch (error) {
-            console.error('Error calling MoMo API:', error.response ? error.response.data : error.message);
-            return res.status(500).json({
-                statusCode: 500,
-                message: "server error",
-                error: error.response ? error.response.data : error.message
+            return res.status(500).json({ 
+                message: "Lỗi hệ thống", 
+                error: error.message 
             });
         }
     }
 
-    static async checkTransactionStatus(req, res) {
-        const { orderId } = req.body;
-
-        const rawSignature = `accessKey=${accessKey}&orderId=${orderId}&partnerCode=MOMO&requestId=${orderId}`;
-
-        const signature = crypto
-            .createHmac("sha256", secretKey)
-            .update(rawSignature)
-            .digest('hex')
-
-
-        const requestBody = JSON.stringify({
-            partnerCode: "MOMO",
-            requestId: orderId,
-            orderId,
-            signature,
-            lang: 'vi'
-        });
-
-        const options = {
-            method: "POST",
-            url: "https://test-payment.momo.vn/v2/gateway/api/query",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            data: requestBody
+    static async updatePremiumStatus(req, res) {
+        try {
+            const { 
+                userId, 
+                transactionId, 
+                amount, 
+                orderInfo, 
+                orderId 
+            } = req.body;
+    
+            if (!userId || !transactionId) {
+                return res.status(400).json({ message: 'Thiếu thông tin yêu cầu' });
+            }
+    
+            const premiumPlans = {
+                '50000': 30,
+                '150000': 90,
+                '500000': 365
+            };
+    
+            const durationDays = premiumPlans[amount] || 30;
+    
+            const now = Date.now();
+            const expiry = now + durationDays * 24 * 60 * 60 * 1000;
+    
+            await database.ref(`users/${userId}/premium`).set({
+                isPremium: true,
+                premiumStart: now,
+                premiumExpiry: expiry,
+                transactionId,
+                orderId,
+                amount,
+                orderInfo
+            });
+    
+            await database.ref(`transactions/${userId}/${transactionId}`).set({
+                type: 'premium_purchase',
+                amount,
+                date: now,
+                orderId,
+                orderInfo,
+                status: 'success'
+            });
+    
+            return res.status(200).json({ 
+                message: 'Kích hoạt premium thành công',
+                premiumExpiry: expiry
+            });
+        } catch (error) {
+            console.error('Lỗi kích hoạt premium:', error);
+            return res.status(500).json({ message: 'Lỗi server' });
         }
-
-        let result = await axios(options);
-
-        return res.status(200).json(result.data);
     }
+    
 
-    static async Callback(req, res) {
-        console.log("Call back: ")
-        console.log(req.body);
-
-        return res.status(200).json(req.body)
+    static async callback(req, res) {
+        try {
+            const { orderId, resultCode, extraData, amount, orderInfo, transId } = req.body;
+    
+            if (resultCode !== 0) {
+                return res.status(400).json({ message: 'Giao dịch không thành công' });
+            }
+    
+            const userData = JSON.parse(Buffer.from(extraData, 'base64').toString('utf-8'));
+            const userId = userData.userId;
+    
+            await MomoPayment.updatePremiumStatus({
+                body: {
+                    userId,
+                    transactionId: transId,
+                    amount,
+                    orderInfo,
+                    orderId
+                }
+            }, res);
+    
+            return res.status(200).json({ message: 'Cập nhật premium thành công' });
+        } catch (error) {
+            return res.status(500).json({ 
+                message: 'Lỗi xử lý callback', 
+                error: error.message 
+            });
+        }
     }
+    
 }
 
-module.exports = momoPayment;
+module.exports = MomoPayment;
