@@ -2,8 +2,7 @@ const vader = require('vader-sentiment');
 
 const analyzeSentiment = (text) => {
     const intensity = vader.SentimentIntensityAnalyzer.polarity_scores(text);
-    
-    // More detailed sentiment analysis
+
     return {
         overall: getOverallSentiment(intensity.compound),
         details: {
@@ -22,10 +21,8 @@ const analyzeGrammar = (message) => {
     try {
         const doc = compromise(message);
 
-        // Extract nouns (subjects)
         const subjects = doc.nouns().out('array');
 
-        // Return analysis results
         return {
             subjects: subjects,
             grammarAnalysis: 'Grammar analysis completed successfully'
