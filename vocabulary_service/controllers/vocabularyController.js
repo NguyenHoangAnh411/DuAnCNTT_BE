@@ -1,5 +1,4 @@
 const Word = require('../models/vocabModel');
-const axios = require('axios');
 
 class VocabController {
     static async getVocabulary(req, res) {

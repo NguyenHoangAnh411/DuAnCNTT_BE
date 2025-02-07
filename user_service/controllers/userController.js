@@ -1,6 +1,6 @@
 const { admin, database } = require('../../services/firebaseService');
 const { uploadImageToFirebase } = require('../../services/firebaseService');
-require('dotenv').config();
+
 
 class UserController {
     static async searchUsers(req, res) {
@@ -150,72 +150,6 @@ class UserController {
                 success: false,
                 message: 'Failed to upload avatar', 
                 error: error.message 
-            });
-        }
-    }
-
-    static async sendNotification(req, res) {
-        const { userIds, title, body, data } = req.body;
-        
-        try {
-            if (!userIds || userIds.length === 0) {
-                return res.status(400).json({
-                    message: 'No users specified'
-                });
-            }
-
-            const usersSnapshot = await admin.database().ref('users').once('value');
-            const users = usersSnapshot.val();
-    
-            if (!users) {
-                return res.status(404).json({
-                    message: 'No users found'
-                });
-            }
-    
-            const fcmTokens = userIds.map(userId => {
-                const user = users[userId];
-                return user ? user.fcmToken : null;
-            }).filter(token => token !== null);
-    
-            if (fcmTokens.length === 0) {
-                return res.status(400).json({
-                    message: 'No valid FCM tokens found for specified users'
-                });
-            }
-
-            const message = {
-                notification: {
-                    title: title,
-                    body: body
-                },
-                data: data || {},
-                tokens: fcmTokens
-            };
-
-            await admin.messaging().sendMulticast(message);
-
-            const notificationsRef = admin.database().ref('notifications');
-            userIds.forEach(userId => {
-                const newNotificationRef = notificationsRef.child(userId).push();
-                newNotificationRef.set({
-                    title: title,
-                    body: body,
-                    data: data || {},
-                    createdAt: admin.database.ServerValue.TIMESTAMP,
-                    isRead: false
-                });
-            });
-    
-            res.status(200).json({
-                message: 'Notification sent and saved successfully'
-            });
-    
-        } catch (error) {
-            console.error('Send notification error:', error);
-            res.status(500).json({
-                message: 'Failed to send notification',
-                error: error.message
             });
         }
     }

@@ -3,7 +3,7 @@ const UserController = require('../controllers/userController');
 const AuthController = require('../controllers/authController');
 const LoginController = require('../controllers/loginController');
 const AttendanceController = require('../controllers/attendanceController');
-const authMiddleware = require('../../middleware/authMiddleware');
+const authMiddleware = require('../middleware/authMiddleware');
 const { upload } = require('../../services/firebaseService');
 const router = express.Router();
 
@@ -30,7 +30,7 @@ router.post(
     authMiddleware.authenticateJWT,
     UserController.uploadAvatar
 );
-router.post('/send-notification', UserController.sendNotification);
+
 router.post('/logout', authMiddleware.authenticateJWT, UserController.logout);
 router.get('/', UserController.listUsers);
 router.get('/search', UserController.searchUsers);
