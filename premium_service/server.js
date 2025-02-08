@@ -1,3 +1,4 @@
+
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -7,6 +8,8 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PREMIUM_PORT || 3014;
 
+
+const clients = new Map();
 app.use(cors());
 app.use(helmet());
 app.use(morgan('combined'));
