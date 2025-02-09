@@ -108,7 +108,6 @@ class AdminNotificationController {
               message: "Thông báo đã được lên lịch và sẽ gửi sau",
             });
           } else {
-            // Gửi ngay nếu không có lịch trình
             const results = [];
             for (const token of tokens) {
               try {
