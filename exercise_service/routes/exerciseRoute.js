@@ -5,6 +5,11 @@ const router = express.Router();
 
 const ExerciseController = require('../controllers/exerciseController')
 
+// video
+router.get("/transcript/:transcriptId", ExerciseController.getTranscript);
+router.get("/video-topics", ExerciseController.getVideoTopic);
+router.get("/audio-topics", ExerciseController.getAudioTopics);
+
 router.get('/grammar-exercises', ExerciseController.getGrammarExercises);
 
 router.get('/writing-exercises', ExerciseController.getWritingExercises);

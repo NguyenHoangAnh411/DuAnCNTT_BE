@@ -10,10 +10,8 @@
         { "src": "lesson_service/server.js", "use": "@vercel/node" },
         { "src": "personalized_service/server.js", "use": "@vercel/node" },
         { "src": "premium_service/server.js", "use": "@vercel/node" },
-        { "src": "services/server.js", "use": "@vercel/node" },
         { "src": "test_service/server.js", "use": "@vercel/node" },
         { "src": "user_service/server.js", "use": "@vercel/node" },
-        { "src": "video_service/server.js", "use": "@vercel/node" },
         { "src": "vocabulary_service/server.js", "use": "@vercel/node" }
     ],
     "routes": [
@@ -54,10 +52,6 @@
             "dest": "premium_service/server.js"
         },
         {
-            "src": "/services/(.*)",
-            "dest": "services/server.js"
-        },
-        {
             "src": "/test/(.*)",
             "dest": "test_service/server.js"
         },
@@ -66,16 +60,8 @@
             "dest": "user_service/server.js"
         },
         {
-            "src": "/video/(.*)",
-            "dest": "video_service/server.js"
-        },
-        {
             "src": "/vocabulary/(.*)",
             "dest": "vocabulary_service/server.js"
-        },
-        {
-            "src": "/(.*)",
-            "dest": "server.js"
         }
     ]
 }

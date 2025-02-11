@@ -10,7 +10,6 @@
     "start:chatbot": "nodemon --inspect ChatBot_service/server.js",
     "start:admin": "nodemon --inspect admin_service/server.js",
     "start:chat": "nodemon --inspect chat_service/server.js",
-    "start:video": "nodemon --inspect video_service/server.js",
     "start:forum": "nodemon --inspect forum_service/server.js",
     "start:course": "nodemon --inspect course_service/server.js",
     "start:vocabulary": "nodemon --inspect vocabulary_service/server.js",
@@ -19,7 +18,7 @@
     "start:user": "nodemon --inspect user_service/server.js",
     "start:games": "nodemon --inspect games_service/server.js",
     "start:test": "nodemon --inspect test_service/server.js",
-    "start": "concurrently \"npm run start:premium\" \"npm run start:personalized\" \"npm run start:simulated\" \"npm run start:chatbot\" \"npm run start:admin\" \"npm run start:chat\" \"npm run start:video\" \"npm run start:forum\" \"npm run start:course\" \"npm run start:vocabulary\" \"npm run start:lesson\" \"npm run start:exercise\" \"npm run start:user\" \"npm run start:games\" \"npm run start:test\""
+    "start": "concurrently \"npm run start:premium\" \"npm run start:personalized\" \"npm run start:simulated\" \"npm run start:chatbot\" \"npm run start:admin\" \"npm run start:chat\" \"npm run start:forum\" \"npm run start:course\" \"npm run start:vocabulary\" \"npm run start:lesson\" \"npm run start:exercise\" \"npm run start:user\" \"npm run start:games\" \"npm run start:test\""
   },
   "keywords": [],
   "author": "",
