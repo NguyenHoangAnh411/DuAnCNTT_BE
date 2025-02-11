@@ -63,7 +63,7 @@ class LoginController {
     }
 
     static async saveUserInfo(req, res) {
-        const { uid, displayName, email, photoUrl, userType, role } = req.body;
+        const { uid, displayName, email, photoUrl, userType, role, fcmToken } = req.body;
 
         if (!uid || !displayName || !email) {
             return res.status(400).send('Thiếu thông tin người dùng');
@@ -75,7 +75,8 @@ class LoginController {
                 email,
                 photoUrl,
                 userType,
-                role
+                role,
+                fcmToken
             });
 
             res.status(200).send('Thông tin người dùng đã được lưu thành công');
