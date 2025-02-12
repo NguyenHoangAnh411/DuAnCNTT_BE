@@ -1,6 +1,5 @@
 const { exec } = require('child_process');
 
-// Danh sách các dịch vụ cần khởi động
 const services = [
   { name: 'personalized', port: 3001 },
   { name: 'premium', port: 3002 },
@@ -16,7 +15,6 @@ const services = [
   { name: 'games', port: 3012 },
 ];
 
-// Hàm khởi động từng dịch vụ
 services.forEach((service) => {
   const command = `node ${service.name}_service/server.js`;
   const childProcess = exec(command);

@@ -3,20 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "echo 'Build script'",
-    "start": "node index.js",
-    "start:personalized": "node personalized_service/server.js",
-    "start:premium": "node premium_service/server.js",
-    "start:chatbot": "node ChatBot_service/server.js",
-    "start:admin": "node admin_service/server.js",
-    "start:chat": "node chat_service/server.js",
-    "start:forum": "node forum_service/server.js",
-    "start:course": "node course_service/server.js",
-    "start:vocabulary": "node vocabulary_service/server.js",
-    "start:lesson": "node lesson_service/server.js",
-    "start:exercise": "node exercise_service/server.js",
-    "start:user": "node user_service/server.js",
-    "start:games": "node games_service/server.js"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
