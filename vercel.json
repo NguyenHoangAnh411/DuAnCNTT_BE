@@ -12,9 +12,9 @@
       "config": { "distDir": "chat_service" }
     },
     {
-      "src": "ChatBot_service/server.js",
+      "src": "chatbot_service/server.js",
       "use": "@vercel/node",
-      "config": { "distDir": "ChatBot_service" }
+      "config": { "distDir": "chatbot_service" }
     },
     {
       "src": "course_service/server.js",
@@ -73,7 +73,7 @@
     },
     {
       "src": "/chatbot/(.*)",
-      "dest": "/ChatBot_service/server.js"
+      "dest": "/chatbot_service/server.js"
     },
     {
       "src": "/course/(.*)",
