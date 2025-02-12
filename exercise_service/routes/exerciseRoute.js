@@ -1,9 +1,16 @@
 const express = require('express');
 const router = express.Router();
 
-
-
+const TestController = require('../controllers/testController');
 const ExerciseController = require('../controllers/exerciseController')
+// Test Controller
+router.get("/", TestController.getTests);
+
+router.get("/:testId/questions", TestController.getTestQuestion);
+
+router.post("/saveTestResult", TestController.submitTest);
+
+router.get("/users/test-results/:userId", TestController.getTestResult);
 
 // video
 router.get("/transcript/:transcriptId", ExerciseController.getTranscript);
