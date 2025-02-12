@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "nodemon --inspect index.js",
+    "build": "echo 'No build step required for this project.'",
+    "vercel-build": "npm install && echo 'Vercel build completed'",
+    "dev": "nodemon --inspect index.js"
   },
   "keywords": [],
   "author": "",

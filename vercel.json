@@ -3,51 +3,63 @@
   "builds": [
     {
       "src": "admin_service/server.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": { "distDir": "admin_service" }
     },
     {
       "src": "chat_service/server.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": { "distDir": "chat_service" }
     },
     {
       "src": "ChatBot_service/server.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": { "distDir": "ChatBot_service" }
     },
     {
       "src": "course_service/server.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": { "distDir": "course_service" }
     },
     {
       "src": "exercise_service/server.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": { "distDir": "exercise_service" }
     },
     {
       "src": "forum_service/server.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": { "distDir": "forum_service" }
     },
     {
       "src": "games_service/server.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": { "distDir": "games_service" }
     },
     {
       "src": "lesson_service/server.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": { "distDir": "lesson_service" }
     },
     {
       "src": "personalized_service/server.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": { "distDir": "personalized_service" }
     },
     {
       "src": "premium_service/server.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": { "distDir": "premium_service" }
     },
     {
       "src": "user_service/server.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": { "distDir": "user_service" }
     },
     {
       "src": "vocabulary_service/server.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": { "distDir": "vocabulary_service" }
     }
   ],
   "routes": [
