@@ -11,6 +11,9 @@
   "author": "",
   "license": "ISC",
   "description": "An AI-powered English learning chatbot",
+  "engines": {
+    "node": ">=20"
+  },
   "dependencies": {
     "@huggingface/transformers": "^3.3.2",
     "axios": "^1.7.9",
