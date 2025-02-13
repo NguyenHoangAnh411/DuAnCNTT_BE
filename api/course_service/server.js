@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const CourseRouter = require('./routes/courseRoute');
-app.use('/api/course', CourseRouter);
+app.use('/', CourseRouter);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

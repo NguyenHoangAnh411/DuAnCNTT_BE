@@ -13,7 +13,7 @@ app.use(morgan('combined'));
 app.use(express.json());
 
 const ChatbotRouter = require('./routes/chatbotRoute');
-app.use('/api/chatbot', ChatbotRouter);
+app.use('/', ChatbotRouter);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 
 connectDB();
 
-app.use('/api/chat', ChatRouter);
+app.use('/', ChatRouter);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

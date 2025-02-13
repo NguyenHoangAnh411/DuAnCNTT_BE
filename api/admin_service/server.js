@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const AdminRouter = require('./routes/adminRoute');
-app.use('/api/admin', AdminRouter);
+app.use('/', AdminRouter);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const Router = require('./routes/exerciseRoute');
-app.use('/api/exercise', Router);
+app.use('/', Router);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

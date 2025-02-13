@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 
 connectDB().catch((err) => console.error('MongoDB connection error:', err));
 
-app.use('/api/vocabulary', VocabRouter);
+app.use('/', VocabRouter);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
