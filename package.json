@@ -1,11 +1,10 @@
 {
   "name": "duancntt_be",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "start": "node index.js",
-    "build": "echo 'No build step required for this project.'",
-    "vercel-build": "npm install && node index.js && echo 'Vercel build completed'"
+    "vercel-build": "npm install"
   },
   "keywords": [],
   "author": "",
