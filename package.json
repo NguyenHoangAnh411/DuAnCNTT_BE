@@ -1,46 +1,42 @@
 {
+  "dependencies": {
+    "axios": "^1.7.9",
+    "bcryptjs": "^2.4.3",
+    "colors": "^1.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "firebase-admin": "^13.1.0",
+    "helmet": "^8.0.0",
+    "mongoose": "^8.10.0",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "node-schedule": "^2.1.1",
+    "nodemailer": "^6.10.0",
+    "tree-kill": "^1.2.2"
+  },
   "name": "duancntt_be",
   "version": "1.0.0",
-  "main": "server.js",
+  "description": "",
+  "main": "api/JS_server.js",
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
-    "start": "node index.js",
-    "vercel-build": "npm install"
+    "start": "node api/JS_server.js",
+    "dev": "nodemon api/JS_server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NguyenHoangAnh411/DuAnCNTT_BE.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "An AI-powered English learning chatbot",
-  "engines": {
-    "node": ">=20"
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/NguyenHoangAnh411/DuAnCNTT_BE/issues"
   },
-  "dependencies": {
-    "@huggingface/transformers": "^3.3.2",
-    "axios": "^1.7.9",
-    "bcrypt": "^5.1.1",
-    "bcryptjs": "^2.4.3",
-    "body-parser": "^1.20.3",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "express-validator": "^7.2.1",
-    "firebase": "^11.1.0",
-    "firebase-admin": "^13.0.2",
-    "helmet": "^8.0.0",
-    "jsonwebtoken": "^9.0.2",
-    "langdetect": "^0.2.1",
-    "lodash": "^4.17.21",
-    "mongoose": "^8.9.4",
-    "morgan": "^1.10.0",
-    "multer": "^1.4.5-lts.1",
-    "node-schedule": "^2.1.1",
-    "nodemailer": "^6.9.16",
-    "openai": "^4.80.0",
-    "sentiment": "^5.0.2",
-    "socket.io": "^4.8.1",
-    "uuid": "^11.0.5"
-  },
-  "devDependencies": {
-    "concurrently": "^9.1.1",
-    "nodemon": "^3.1.9"
-  }
+  "homepage": "https://github.com/NguyenHoangAnh411/DuAnCNTT_BE#readme"
 }

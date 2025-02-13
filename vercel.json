@@ -1,31 +1,14 @@
 {
-  "version": 2,
   "builds": [
-    { "src": "admin_service/server.js", "use": "@vercel/node" },
-    { "src": "chat_service/server.js", "use": "@vercel/node" },
-    { "src": "chatbot_service/server.js", "use": "@vercel/node" },
-    { "src": "course_service/server.js", "use": "@vercel/node" },
-    { "src": "exercise_service/server.js", "use": "@vercel/node" },
-    { "src": "forum_service/server.js", "use": "@vercel/node" },
-    { "src": "games_service/server.js", "use": "@vercel/node" },
-    { "src": "lesson_service/server.js", "use": "@vercel/node" },
-    { "src": "personalized_service/server.js", "use": "@vercel/node" },
-    { "src": "premium_service/server.js", "use": "@vercel/node" },
-    { "src": "user_service/server.js", "use": "@vercel/node" },
-    { "src": "vocabulary_service/server.js", "use": "@vercel/node" }
+    {
+      "src": "api/JS_server.js",
+      "use": "@vercel/node"
+    }
   ],
   "routes": [
-    { "src": "/admin/(.*)", "dest": "/admin_service/server.js" },
-    { "src": "/chat/(.*)", "dest": "/chat_service/server.js" },
-    { "src": "/chatbot/(.*)", "dest": "/chatbot_service/server.js" },
-    { "src": "/course/(.*)", "dest": "/course_service/server.js" },
-    { "src": "/exercise/(.*)", "dest": "/exercise_service/server.js" },
-    { "src": "/forum/(.*)", "dest": "/forum_service/server.js" },
-    { "src": "/games/(.*)", "dest": "/games_service/server.js" },
-    { "src": "/lesson/(.*)", "dest": "/lesson_service/server.js" },
-    { "src": "/personalized/(.*)", "dest": "/personalized_service/server.js" },
-    { "src": "/premium/(.*)", "dest": "/premium_service/server.js" },
-    { "src": "/user/(.*)", "dest": "/user_service/server.js" },
-    { "src": "/vocabulary/(.*)", "dest": "/vocabulary_service/server.js" }
+    {
+      "src": "/(.*)",
+      "dest": "api/JS_server.js"
+    }
   ]
 }
