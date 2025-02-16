@@ -1,7 +1,6 @@
 const { admin, database } = require('../../services/firebaseService');
 
 class LessonController {
-  // Get a lesson by ID
   static async getLessonById(req, res) {
     const { lessonId } = req.params;
 
@@ -20,7 +19,6 @@ class LessonController {
     }
   }
 
-  // Get all lessons with pagination
   static async getAllLessons(req, res) {
     const { page = 1, limit = 10 } = req.query;
 
@@ -39,7 +37,6 @@ class LessonController {
     }
   }
 
-  // Create a new lesson
   static async createLesson(req, res) {
     const { title, content, exercises, quizzes, additionalInfo } = req.body;
 
@@ -66,7 +63,6 @@ class LessonController {
     }
   }
 
-  // Update lesson
   static async updateLesson(req, res) {
     const { lessonId } = req.params;
     const updates = req.body;
