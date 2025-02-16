@@ -1,20 +1,12 @@
 const { admin, database } = require('../../services/firebaseService');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET;
 const axios = require('axios');
 class LoginController {
     static async login(req, res) {
-        const { email, password, fcmToken, recaptchaToken } = req.body;
-    
-        if (!recaptchaToken) {
-            return res.status(400).json({ message: "reCAPTCHA token is required" });
-        }
+        const { email, password, fcmToken } = req.body;
     
         try {
-            const decodedToken = await admin.appCheck().verifyToken(recaptchaToken);
-            console.log("✅ Firebase App Check verified:", decodedToken);
-
             const userSnapshot = await admin.database()
                 .ref('users')
                 .orderByChild('email')
