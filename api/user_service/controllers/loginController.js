@@ -1,69 +1,79 @@
 const { admin, database } = require('../../services/firebaseService');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
+const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET;
+const axios = require('axios');
 class LoginController {
     static async login(req, res) {
-        const { email, password, fcmToken } = req.body;
-      
+        const { email, password, fcmToken, recaptchaToken } = req.body;
+    
+        if (!recaptchaToken) {
+            return res.status(400).json({ message: "reCAPTCHA token is required" });
+        }
+    
         try {
+            const decodedToken = await admin.appCheck().verifyToken(recaptchaToken);
+            console.log("✅ Firebase App Check verified:", decodedToken);
+
             const userSnapshot = await admin.database()
                 .ref('users')
                 .orderByChild('email')
                 .equalTo(email)
                 .once('value');
-      
+    
             const users = userSnapshot.val();
-      
+    
             if (!users) {
                 return res.status(401).json({ message: 'Invalid email or password' });
             }
-      
+    
             const userId = Object.keys(users)[0];
             const user = users[userId];
-
+    
             if (!user.password) {
                 return res.status(401).json({ message: 'Invalid email or password' });
             }
-
+    
             const isMatch = await bcrypt.compare(password, user.password);
             if (!isMatch) {
                 return res.status(401).json({ message: 'Invalid email or password' });
             }
-
+    
             if (fcmToken) {
                 await admin.database().ref(`users/${userId}/fcmToken`).set(fcmToken);
             }
-
+    
             const token = jwt.sign(
                 {
                     uid: userId,
                     email: user.email,
-                    username: user.username,
+                    displayName: user.displayName,
                     role: user.role,
                 },
-                // process.env.JWT_SECRET,
                 'HoangAnhDepTrai',
                 { expiresIn: '1h' }
             );
-      
+    
             res.status(200).json({
                 token: token,
                 uid: userId,
                 email: user.email,
-                username: user.username,
+                displayName: user.displayName,
                 role: user.role,
                 isVerified: user.isVerified,
+                photoUrl: user.photoUrl,
+                premium: user.premium,
             });
-      
+    
         } catch (error) {
             console.error('Login error:', error);
             res.status(500).json({ message: 'Login failed', error: error.message });
         }
     }
+    
 
     static async saveUserInfo(req, res) {
-        const { uid, displayName, email, photoUrl, userType, role, fcmToken } = req.body;
+        const { uid, displayName, email, photoUrl, userType, role, fcmToken, premium } = req.body;
 
         if (!uid || !displayName || !email) {
             return res.status(400).send('Thiếu thông tin người dùng');
@@ -76,7 +86,8 @@ class LoginController {
                 photoUrl,
                 userType,
                 role,
-                fcmToken
+                fcmToken,
+                premium
             });
 
             res.status(200).send('Thông tin người dùng đã được lưu thành công');

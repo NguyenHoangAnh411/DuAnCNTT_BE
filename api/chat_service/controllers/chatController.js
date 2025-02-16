@@ -42,43 +42,44 @@ class ChatController {
     const { groupId, senderId, content } = req.body;
 
     try {
-      const senderRef = database.ref(`users/${senderId}`);
-      const senderSnapshot = await senderRef.once('value');
-      if (!senderSnapshot.exists()) {
-        return res.status(404).json({ message: 'Sender not found' });
-      }
+        const senderRef = database.ref(`users/${senderId}`);
+        const senderSnapshot = await senderRef.once('value');
+        if (!senderSnapshot.exists()) {
+            return res.status(404).json({ message: 'Sender not found' });
+        }
 
-      const group = await Group.findById(groupId);
-      if (!group) {
-        return res.status(404).json({ message: 'Group not found' });
-      }
+        const group = await Group.findById(groupId);
+        if (!group) {
+            return res.status(404).json({ message: 'Group not found' });
+        }
 
-      if (!group.members.includes(senderId)) {
-        return res.status(403).json({ message: 'Sender is not a member of the group' });
-      }
+        if (!group.members.includes(senderId)) {
+            return res.status(403).json({ message: 'Sender is not a member of the group' });
+        }
 
-      const message = new Message({
-        group: groupId,
-        sender: senderId,
-        content,
-        timestamp: Date.now(),
-      });
+        const message = new Message({
+            group: groupId,
+            sender: senderId,
+            content,
+            timestamp: Date.now(),
+        });
 
-      await message.save();
+        await message.save();
 
-      const senderData = senderSnapshot.val();
-      req.app.get('socketio').to(groupId).emit('newMessage', {
-        ...message.toObject(),
-        sender: {
-          displayName: senderData?.displayName || 'Unknown',
-          photoUrl: senderData?.photoUrl || null,
-          id: senderId,
-        },
-      });
+        const senderData = senderSnapshot.val();
+        req.app.get('socketio').to(groupId).emit('newMessage', {
+            ...message.toObject(),
+            sender: {
+                displayName: senderData?.displayName || 'Unknown',
+                photoUrl: senderData?.photoUrl || null,
+                id: senderId,
+            },
+        });
 
-      res.status(201).json({ message: 'Message sent successfully', message });
+        res.status(201).json({ message: 'Message sent successfully', data: message });
     } catch (err) {
-      res.status(500).json({ error: 'Failed to send message', details: err.message });
+        console.error('Error in sendMessage:', err);
+        res.status(500).json({ error: 'Failed to send message', details: err.message });
     }
   }
 

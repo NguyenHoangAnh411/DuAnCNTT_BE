@@ -23,5 +23,7 @@ app.use('/chatbot', require('./chatbot_service/server'));
 app.get('/', (req, res) => {
   res.send('Welcome to DUANCNTT Backend!');
 });
+app.listen(3000, () => {
 
+})
 module.exports = app;

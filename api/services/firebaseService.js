@@ -16,8 +16,10 @@ if (!admin.apps.length) {
         storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
     });
 }
+admin.appCheck().verifyToken;
 
 const bucket = admin.storage().bucket();
+
 const storage = multer.memoryStorage();
 const upload = multer({
     storage: storage,
@@ -178,5 +180,5 @@ module.exports = {
     uploadFileToFirebase,
     upload,
     uploadImageToFirebase,
-    uploadPost
+    uploadPost,
 };
